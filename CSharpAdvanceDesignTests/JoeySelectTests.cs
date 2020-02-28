@@ -1,14 +1,12 @@
-﻿using ExpectedObjects;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
-    [TestFixture()]
-    [Ignore("not yet")]
+    [TestFixture]
     public class JoeySelectTests
     {
         [Test]
@@ -22,23 +20,10 @@ namespace CSharpAdvanceDesignTests
                 "https://tw.yahoo.com",
                 "https://facebook.com",
                 "https://twitter.com",
-                "https://github.com",
+                "https://github.com"
             };
 
             expected.ToExpectedObject().ShouldEqual(actual.ToList());
-        }
-
-        private IEnumerable<string> JoeySelect(IEnumerable<string> urls)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private static IEnumerable<string> GetUrls()
-        {
-            yield return "http://tw.yahoo.com";
-            yield return "https://facebook.com";
-            yield return "https://twitter.com";
-            yield return "http://github.com";
         }
 
         private static List<Employee> GetEmployees()
@@ -49,6 +34,26 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Tom", LastName = "Li"},
                 new Employee {FirstName = "David", LastName = "Chen"}
             };
+        }
+
+        private static IEnumerable<string> GetUrls()
+        {
+            yield return "http://tw.yahoo.com";
+            yield return "https://facebook.com";
+            yield return "https://twitter.com";
+            yield return "http://github.com";
+        }
+
+        private IEnumerable<string> JoeySelect(IEnumerable<string> urls)
+        {
+            var result = new List<string>();
+
+            foreach (var url in urls)
+            {
+                result.Add(url.Replace("http:", "https:"));
+            }
+
+            return result;
         }
     }
 }
