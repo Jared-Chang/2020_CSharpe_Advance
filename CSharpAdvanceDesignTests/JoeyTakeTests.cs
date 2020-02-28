@@ -75,23 +75,24 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyTake3(IEnumerable<Employee> employees)
         {
-            var index = 0;
-            var count = 3;
-            using var enumerator = employees.GetEnumerator();
+            return JoeyTake(employees, 3);
+            //var index = 0;
+            //var count = 3;
+            //using var enumerator = employees.GetEnumerator();
 
-            while (enumerator.MoveNext())
-            {
-                if (index < count)
-                {
-                    yield return enumerator.Current;
-                }
-                else
-                {
-                    yield break;
-                }
+            //while (enumerator.MoveNext())
+            //{
+            //    if (index < count)
+            //    {
+            //        yield return enumerator.Current;
+            //    }
+            //    else
+            //    {
+            //        yield break;
+            //    }
 
-                index++;
-            }
+            //    index++;
+            //}
         }
     }
 }
