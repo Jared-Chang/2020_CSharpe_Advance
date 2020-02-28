@@ -45,7 +45,7 @@ namespace CSharpAdvanceDesignTests
                 "5"
             };
 
-            var actual = JoeySkip4NumberStrings(numberStrins, 3);
+            var actual = JoeySkip(numberStrins, 3);
 
             var expected = new[]
             {
@@ -56,27 +56,9 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeySkip(IEnumerable<Employee> employees, int count)
+        private IEnumerable<TSource> JoeySkip<TSource>(IEnumerable<TSource> source, int count)
         {
-            using var enumerator = employees.GetEnumerator();
-
-            var index = 0;
-
-            while (enumerator.MoveNext())
-            {
-                if (index < count)
-                {
-                    index++;
-                    continue;
-                }
-
-                yield return enumerator.Current;
-            }
-        }
-
-        private IEnumerable<string> JoeySkip4NumberStrings(IEnumerable<string> numberStrins, int count)
-        {
-            using var enumerator = numberStrins.GetEnumerator();
+            using var enumerator = source.GetEnumerator();
 
             var index = 0;
 
