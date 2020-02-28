@@ -56,7 +56,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "David", LastName = "Chen"}
             };
 
-            var actual = JoeySelectForEmployee(employees, employee => $"{employee.FirstName} {employee.LastName}");
+            var actual = JoeySelect(employees, employee => $"{employee.FirstName} {employee.LastName}");
 
             var expected = new[]
             {
@@ -86,25 +86,14 @@ namespace CSharpAdvanceDesignTests
             yield return "http://github.com";
         }
 
-        private IEnumerable<string> JoeySelect(IEnumerable<string> urls, Func<string, string> replace)
+        private IEnumerable<TReturn> JoeySelect<TSource, TReturn>(IEnumerable<TSource> source,
+            Func<TSource, TReturn> transform)
         {
-            var result = new List<string>();
+            var result = new List<TReturn>();
 
-            foreach (var url in urls)
+            foreach (var item in source)
             {
-                result.Add(replace(url));
-            }
-
-            return result;
-        }
-
-        private List<string> JoeySelectForEmployee(List<Employee> employees, Func<Employee, string> func)
-        {
-            var result = new List<string>();
-
-            foreach (var employee in employees)
-            {
-                result.Add(func(employee));
+                result.Add(transform(item));
             }
 
             return result;
