@@ -24,6 +24,23 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
+        [Test]
+        public void take_3_employees()
+        {
+            var employees = GetEmployees();
+
+            var actual = JoeyTake3(employees);
+
+            var expected = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"}
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
         private static IEnumerable<Employee> GetEmployees()
         {
             return new List<Employee>
@@ -44,6 +61,27 @@ namespace CSharpAdvanceDesignTests
             while (enumerator.MoveNext())
             {
                 if (index < 2)
+                {
+                    yield return enumerator.Current;
+                }
+                else
+                {
+                    yield break;
+                }
+
+                index++;
+            }
+        }
+
+        private IEnumerable<Employee> JoeyTake3(IEnumerable<Employee> employees)
+        {
+            var index = 0;
+            var count = 3;
+            using var enumerator = employees.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                if (index < count)
                 {
                     yield return enumerator.Current;
                 }
