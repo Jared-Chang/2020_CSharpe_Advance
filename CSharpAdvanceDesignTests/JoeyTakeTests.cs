@@ -13,7 +13,7 @@ namespace CSharpAdvanceDesignTests
         {
             var employees = GetEmployees();
 
-            var actual = JoeyTake(employees);
+            var actual = JoeyTake(employees, 2);
 
             var expected = new List<Employee>
             {
@@ -53,14 +53,14 @@ namespace CSharpAdvanceDesignTests
             };
         }
 
-        private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees)
+        private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees, int count)
         {
             var index = 0;
             using var enumerator = employees.GetEnumerator();
 
             while (enumerator.MoveNext())
             {
-                if (index < 2)
+                if (index < count)
                 {
                     yield return enumerator.Current;
                 }
