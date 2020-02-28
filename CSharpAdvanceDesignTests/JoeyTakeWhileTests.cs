@@ -1,13 +1,12 @@
-﻿using ExpectedObjects;
+﻿using System;
+using System.Collections.Generic;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyTakeWhileTests
     {
         [Test]
@@ -20,7 +19,7 @@ namespace CSharpAdvanceDesignTests
                 new Card {Kind = CardKind.Normal, Point = 4},
                 new Card {Kind = CardKind.Separate},
                 new Card {Kind = CardKind.Normal, Point = 5},
-                new Card {Kind = CardKind.Normal, Point = 6},
+                new Card {Kind = CardKind.Normal, Point = 6}
             };
 
             var actual = JoeyTakeWhile(cards);
@@ -29,15 +28,15 @@ namespace CSharpAdvanceDesignTests
             {
                 new Card {Kind = CardKind.Normal, Point = 2},
                 new Card {Kind = CardKind.Normal, Point = 3},
-                new Card {Kind = CardKind.Normal, Point = 4},
+                new Card {Kind = CardKind.Normal, Point = 4}
             };
 
-            expected.ToExpectedObject().ShouldEqual(actual.ToList());
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
         private IEnumerable<Card> JoeyTakeWhile(IEnumerable<Card> cards)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
