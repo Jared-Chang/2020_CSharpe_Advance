@@ -45,6 +45,24 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldEqual(actual.ToList());
         }
 
+        [Test]
+        public void append_sequence_number_first()
+        {
+            var urls = GetUrls();
+
+            var actual = urls.JoeySelect((url, index) => $"{index + 1}, {url.Replace("http:", "https:") + ":9191"}");
+
+            var expected = new List<string>
+            {
+                "1, https://tw.yahoo.com:9191",
+                "2, https://facebook.com:9191",
+                "3, https://twitter.com:9191",
+                "4, https://github.com:9191"
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual.ToList());
+        }
+
 
         [Test]
         public void select_full_name()
