@@ -80,5 +80,23 @@ namespace Lab
                 index++;
             }
         }
+
+        public static IEnumerable<TSource> JoeySkip<TSource>(this IEnumerable<TSource> source, int count)
+        {
+            using var enumerator = source.GetEnumerator();
+
+            var index = 0;
+
+            while (enumerator.MoveNext())
+            {
+                if (index < count)
+                {
+                    index++;
+                    continue;
+                }
+
+                yield return enumerator.Current;
+            }
+        }
     }
 }
