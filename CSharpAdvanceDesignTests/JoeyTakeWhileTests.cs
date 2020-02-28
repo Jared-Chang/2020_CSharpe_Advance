@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ExpectedObjects;
+using Lab;
 using Lab.Entities;
 using NUnit.Framework;
 
@@ -22,7 +22,7 @@ namespace CSharpAdvanceDesignTests
                 new Card {Kind = CardKind.Normal, Point = 6}
             };
 
-            var actual = JoeyTakeWhile(cards, current => current.Kind == CardKind.Normal);
+            var actual = cards.JoeyTakeWhile(current => current.Kind == CardKind.Normal);
 
             var expected = new List<Card>
             {
@@ -47,7 +47,7 @@ namespace CSharpAdvanceDesignTests
                 new Card {Kind = CardKind.Normal, Point = 6}
             };
 
-            var actual = JoeyTakeWhile(cards, current => current.Kind == CardKind.Separate);
+            var actual = cards.JoeyTakeWhile(current => current.Kind == CardKind.Separate);
 
             var expected = new List<Card>();
             expected.ToExpectedObject().ShouldMatch(actual);
@@ -58,27 +58,10 @@ namespace CSharpAdvanceDesignTests
         {
             var numbers = new[] {1, 2, 3, 4, -1, 5, 6};
 
-            var actual = JoeyTakeWhile(numbers, number => number > 0);
+            var actual = numbers.JoeyTakeWhile(number => number > 0);
 
             var expected = new[] {1, 2, 3, 4};
             expected.ToExpectedObject().ShouldMatch(actual);
-        }
-
-        private IEnumerable<TSource> JoeyTakeWhile<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            using var enumerator = source.GetEnumerator();
-
-            while (enumerator.MoveNext())
-            {
-                var current = enumerator.Current;
-                if (predicate(current))
-                {
-                    yield return current;
-                    continue;
-                }
-
-                yield break;
-            }
         }
     }
 }

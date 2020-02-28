@@ -98,5 +98,22 @@ namespace Lab
                 yield return enumerator.Current;
             }
         }
+
+        public static IEnumerable<TSource> JoeyTakeWhile<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            using var enumerator = source.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (predicate(current))
+                {
+                    yield return current;
+                    continue;
+                }
+
+                yield break;
+            }
+        }
     }
 }
