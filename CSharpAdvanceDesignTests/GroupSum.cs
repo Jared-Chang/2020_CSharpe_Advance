@@ -27,7 +27,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             //sum of all Saving of each group which 3 Account per group
-            var actual = JoeyGroupSum(accounts, index => index / 3);
+            var actual = JoeyGroupSum(accounts, index => index / 3, (sum, account) => sum + account.Saving);
 
             var expected = new[] {60, 150, 240, 210};
 
@@ -52,7 +52,7 @@ namespace CSharpAdvanceDesignTests
                 new Account {Name = "Bruce", Saving = 110}
             };
 
-            var actual = JoeyGroupSum(accounts, index => index / 4);
+            var actual = JoeyGroupSum(accounts, index => index / 4, (sum, account) => sum + account.Saving);
 
             var expected = new[] {100, 260, 300};
 
@@ -77,14 +77,15 @@ namespace CSharpAdvanceDesignTests
                 new Account {Name = "Bruce", Saving = 110}
             };
 
-            var actual = JoeyGroupSumDevideBy10(accounts, index => index / 4);
+            var actual = JoeyGroupSum(accounts, index => index / 4, (sum, account) => sum + account.Saving / 10);
 
             var expected = new[] {10, 26, 30};
 
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<int> JoeyGroupSum(IEnumerable<Account> accounts, Func<int, int> generateKey)
+        private IEnumerable<int> JoeyGroupSum(IEnumerable<Account> accounts, Func<int, int> generateKey,
+            Func<int, Account, int> accumulator)
         {
             var groups = new Dictionary<int, List<Account>>();
 
@@ -111,43 +112,7 @@ namespace CSharpAdvanceDesignTests
 
                 foreach (var account in group.Value)
                 {
-                    sum += account.Saving;
-                }
-
-                sums.Add(sum);
-            }
-
-            return sums;
-        }
-
-        private IEnumerable<int> JoeyGroupSumDevideBy10(IEnumerable<Account> accounts, Func<int, int> generateKey)
-        {
-            var groups = new Dictionary<int, List<Account>>();
-
-            var index = 0;
-
-            foreach (var account in accounts)
-            {
-                var groupKey = generateKey(index);
-                if (!groups.ContainsKey(groupKey))
-                {
-                    groups[groupKey] = new List<Account>();
-                }
-
-                groups[groupKey].Add(account);
-
-                index++;
-            }
-
-            var sums = new List<int>();
-
-            foreach (var group in groups)
-            {
-                var sum = 0;
-
-                foreach (var account in group.Value)
-                {
-                    sum += account.Saving / 10;
+                    sum = accumulator(sum, account);
                 }
 
                 sums.Add(sum);
