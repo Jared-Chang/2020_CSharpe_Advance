@@ -46,7 +46,7 @@ namespace CSharpAdvanceDesignTests
         {
             var names = new[] {"Tom", "Joey", "David"};
 
-            var actual = JoeyTake4Names(names, 4);
+            var actual = JoeyTake(names, 4);
 
             var expected = new[] {"Tom", "Joey", "David"};
 
@@ -69,26 +69,6 @@ namespace CSharpAdvanceDesignTests
         {
             var index = 0;
             using var enumerator = source.GetEnumerator();
-
-            while (enumerator.MoveNext())
-            {
-                if (index < count)
-                {
-                    yield return enumerator.Current;
-                }
-                else
-                {
-                    yield break;
-                }
-
-                index++;
-            }
-        }
-
-        private IEnumerable<string> JoeyTake4Names(IEnumerable<string> names, int count)
-        {
-            var index = 0;
-            using var enumerator = names.GetEnumerator();
 
             while (enumerator.MoveNext())
             {
