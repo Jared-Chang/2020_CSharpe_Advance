@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
@@ -30,7 +29,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joseph", LastName = "Yao"}
             };
 
-            expected.ToExpectedObject().ShouldEqual(actual.ToList());
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
 
@@ -54,7 +53,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joseph", LastName = "Yao"}
             };
 
-            expected.ToExpectedObject().ShouldEqual(actual.ToList());
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
         private IEnumerable<Employee> JoeySkip(IEnumerable<Employee> employees, int count)
@@ -63,8 +62,7 @@ namespace CSharpAdvanceDesignTests
 
             var index = 0;
 
-            while (enumerator.MoveNext()
-            )
+            while (enumerator.MoveNext())
             {
                 if (index < count)
                 {
