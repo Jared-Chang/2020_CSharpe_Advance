@@ -29,7 +29,7 @@ namespace CSharpAdvanceDesignTests
         {
             var employees = GetEmployees();
 
-            var actual = JoeyTake3(employees);
+            var actual = JoeyTake(employees, 3);
 
             var expected = new List<Employee>
             {
@@ -71,28 +71,6 @@ namespace CSharpAdvanceDesignTests
 
                 index++;
             }
-        }
-
-        private IEnumerable<Employee> JoeyTake3(IEnumerable<Employee> employees)
-        {
-            return JoeyTake(employees, 3);
-            //var index = 0;
-            //var count = 3;
-            //using var enumerator = employees.GetEnumerator();
-
-            //while (enumerator.MoveNext())
-            //{
-            //    if (index < count)
-            //    {
-            //        yield return enumerator.Current;
-            //    }
-            //    else
-            //    {
-            //        yield break;
-            //    }
-
-            //    index++;
-            //}
         }
     }
 }
