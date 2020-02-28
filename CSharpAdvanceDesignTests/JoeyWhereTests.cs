@@ -84,15 +84,15 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private List<TSource> JoeyWhere<TSource>(List<TSource> products, Predicate<TSource> predicate)
+        private List<TSource> JoeyWhere<TSource>(List<TSource> source, Predicate<TSource> predicate)
         {
             var list = new List<TSource>();
 
-            foreach (var product in products)
+            foreach (var item in source)
             {
-                if (predicate(product))
+                if (predicate(item))
                 {
-                    list.Add(product);
+                    list.Add(item);
                 }
             }
 
