@@ -5,7 +5,7 @@ namespace Lab
 {
     static public class LinqExtensions
     {
-        public static List<TSource> JoeyWhere<TSource>(List<TSource> source, Predicate<TSource> predicate)
+        public static List<TSource> JoeyWhere<TSource>(this List<TSource> source, Predicate<TSource> predicate)
         {
             var list = new List<TSource>();
 
