@@ -87,28 +87,9 @@ namespace CSharpAdvanceDesignTests
         public void find_positive_number_the_first_one_and_skip_second_one_and_take_others()
         {
             var numbers = new List<int> {1, 2, 3, 4, -5};
-            var actual = JoeyWhereWithIndex(numbers);
+            var actual = numbers.JoeyWhere((number, index) => index == 0 || index > 1 && number > 0);
             var expected = new List<int> {1, 3, 4};
             expected.ToExpectedObject().ShouldMatch(actual);
-        }
-
-        private List<int> JoeyWhereWithIndex(List<int> numbers)
-        {
-            var result = new List<int>();
-
-            var index = 0;
-
-            foreach (var number in numbers)
-            {
-                if (index == 0 || index > 1 && number > 0)
-                {
-                    result.Add(number);
-                }
-
-                index++;
-            }
-
-            return result;
         }
     }
 }
