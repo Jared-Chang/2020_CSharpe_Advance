@@ -65,10 +65,10 @@ namespace CSharpAdvanceDesignTests
             };
         }
 
-        private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees, int count)
+        private IEnumerable<TSource> JoeyTake<TSource>(IEnumerable<TSource> source, int count)
         {
             var index = 0;
-            using var enumerator = employees.GetEnumerator();
+            using var enumerator = source.GetEnumerator();
 
             while (enumerator.MoveNext())
             {
