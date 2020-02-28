@@ -51,7 +51,8 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = JoeyWhere(products, product => product.Price > 200 && product.Price < 500 && product.Cost < 30);
+            var actual = JoeyWhere(products,
+                product => product.Price > 200 && product.Price < 500 && product.Cost < 30);
 
             var expected = new List<Product>
             {
@@ -61,7 +62,7 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private List<Product> JoeyWhere(List<Product> products, Func<Product, bool> predicate)
+        private List<Product> JoeyWhere(List<Product> products, Predicate<Product> predicate)
         {
             var list = new List<Product>();
 
