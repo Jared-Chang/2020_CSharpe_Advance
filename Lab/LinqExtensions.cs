@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Lab
 {
-    public class LinqExtensions
+    static public class LinqExtensions
     {
         public static List<TSource> JoeyWhere<TSource>(List<TSource> source, Predicate<TSource> predicate)
         {
