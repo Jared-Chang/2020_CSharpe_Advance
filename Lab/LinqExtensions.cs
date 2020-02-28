@@ -19,5 +19,18 @@ namespace Lab
 
             return list;
         }
+
+        public static IEnumerable<TReturn> JoeySelect<TSource, TReturn>(this IEnumerable<TSource> source,
+            Func<TSource, TReturn> transform)
+        {
+            var result = new List<TReturn>();
+
+            foreach (var item in source)
+            {
+                result.Add(transform(item));
+            }
+
+            return result;
+        }
     }
 }
