@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ExpectedObjects;
 using NUnit.Framework;
 
@@ -26,7 +27,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             //sum of all Saving of each group which 3 Account per group
-            var actual = JoeyGroupSum(accounts);
+            var actual = JoeyGroupSum(accounts, index => index / 3);
 
             var expected = new[] {60, 150, 240, 210};
 
@@ -51,14 +52,14 @@ namespace CSharpAdvanceDesignTests
                 new Account {Name = "Bruce", Saving = 110}
             };
 
-            var actual = JoeyGroup4Sum(accounts);
+            var actual = JoeyGroupSum(accounts, index => index / 4);
 
             var expected = new[] {100, 260, 300};
 
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<int> JoeyGroup4Sum(IEnumerable<Account> accounts)
+        private IEnumerable<int> JoeyGroupSum(IEnumerable<Account> accounts, Func<int, int> generateKey)
         {
             var groups = new Dictionary<int, List<Account>>();
 
@@ -66,43 +67,7 @@ namespace CSharpAdvanceDesignTests
 
             foreach (var account in accounts)
             {
-                var groupKey = index / 4;
-                if (!groups.ContainsKey(groupKey))
-                {
-                    groups[groupKey] = new List<Account>();
-                }
-
-                groups[groupKey].Add(account);
-
-                index++;
-            }
-
-            var sums = new List<int>();
-
-            foreach (var group in groups)
-            {
-                var sum = 0;
-
-                foreach (var account in group.Value)
-                {
-                    sum += account.Saving;
-                }
-
-                sums.Add(sum);
-            }
-
-            return sums;
-        }
-
-        private IEnumerable<int> JoeyGroupSum(IEnumerable<Account> accounts)
-        {
-            var groups = new Dictionary<int, List<Account>>();
-
-            var index = 0;
-
-            foreach (var account in accounts)
-            {
-                var groupKey = index / 3;
+                var groupKey = generateKey(index);
                 if (!groups.ContainsKey(groupKey))
                 {
                     groups[groupKey] = new List<Account>();
