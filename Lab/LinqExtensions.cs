@@ -8,65 +8,57 @@ namespace Lab
         public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> source,
             Predicate<TSource> predicate)
         {
-            var list = new List<TSource>();
+            using var enumerator = source.GetEnumerator();
 
-            foreach (var item in source)
+            while (enumerator.MoveNext())
             {
-                if (predicate(item))
+                if (predicate(enumerator.Current))
                 {
-                    list.Add(item);
+                    yield return enumerator.Current;
                 }
             }
-
-            return list;
         }
 
         public static IEnumerable<TReturn> JoeySelect<TSource, TReturn>(this IEnumerable<TSource> source,
-            Func<TSource, TReturn> transform)
+            Func<TSource, TReturn> selector)
         {
-            var result = new List<TReturn>();
+            using var enumerator = source.GetEnumerator();
 
-            foreach (var item in source)
+            while (enumerator.MoveNext())
             {
-                result.Add(transform(item));
+                yield return selector(enumerator.Current);
             }
-
-            return result;
         }
 
         public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> source,
             Func<TSource, int, bool> predicate)
         {
-            var result = new List<TSource>();
+            using var enumerator = source.GetEnumerator();
 
             var index = 0;
 
-            foreach (var item in source)
+            while (enumerator.MoveNext())
             {
-                if (predicate(item, index))
+                if (predicate(enumerator.Current, index))
                 {
-                    result.Add(item);
+                    yield return enumerator.Current;
                 }
 
                 index++;
             }
-
-            return result;
         }
 
         public static IEnumerable<TReturn> JoeySelect<TSource, TReturn>(this IEnumerable<TSource> source,
             Func<TSource, int, TReturn> selector)
         {
+            using var enumerator = source.GetEnumerator();
             var index = 0;
-            var result = new List<TReturn>();
 
-            foreach (var item in source)
+            while (enumerator.MoveNext())
             {
-                result.Add(selector(item, index));
+                yield return selector(enumerator.Current, index);
                 index++;
             }
-
-            return result;
         }
     }
 }
