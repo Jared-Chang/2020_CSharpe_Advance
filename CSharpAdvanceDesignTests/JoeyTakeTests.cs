@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ExpectedObjects;
+using Lab;
 using Lab.Entities;
 using NUnit.Framework;
 
@@ -13,7 +14,7 @@ namespace CSharpAdvanceDesignTests
         {
             var employees = GetEmployees();
 
-            var actual = JoeyTake(employees, 2);
+            var actual = employees.JoeyTake(2);
 
             var expected = new List<Employee>
             {
@@ -29,7 +30,7 @@ namespace CSharpAdvanceDesignTests
         {
             var employees = GetEmployees();
 
-            var actual = JoeyTake(employees, 3);
+            var actual = employees.JoeyTake(3);
 
             var expected = new List<Employee>
             {
@@ -46,7 +47,7 @@ namespace CSharpAdvanceDesignTests
         {
             var names = new[] {"Tom", "Joey", "David"};
 
-            var actual = JoeyTake(names, 4);
+            var actual = names.JoeyTake(4);
 
             var expected = new[] {"Tom", "Joey", "David"};
 
@@ -63,26 +64,6 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Mike", LastName = "Chang"},
                 new Employee {FirstName = "Joseph", LastName = "Yao"}
             };
-        }
-
-        private IEnumerable<TSource> JoeyTake<TSource>(IEnumerable<TSource> source, int count)
-        {
-            var index = 0;
-            using var enumerator = source.GetEnumerator();
-
-            while (enumerator.MoveNext())
-            {
-                if (index < count)
-                {
-                    yield return enumerator.Current;
-                }
-                else
-                {
-                    yield break;
-                }
-
-                index++;
-            }
         }
     }
 }
