@@ -58,37 +58,20 @@ namespace CSharpAdvanceDesignTests
         {
             var numbers = new[] {1, 2, 3, 4, -1, 5, 6};
 
-            var actual = JoeyTakeWhile4Numbers(numbers);
+            var actual = JoeyTakeWhile(numbers, number => number > 0);
 
             var expected = new[] {1, 2, 3, 4};
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Card> JoeyTakeWhile(IEnumerable<Card> cards, Func<Card, bool> predicate)
+        private IEnumerable<TSource> JoeyTakeWhile<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            using var enumerator = cards.GetEnumerator();
+            using var enumerator = source.GetEnumerator();
 
             while (enumerator.MoveNext())
             {
                 var current = enumerator.Current;
                 if (predicate(current))
-                {
-                    yield return current;
-                    continue;
-                }
-
-                yield break;
-            }
-        }
-
-        private IEnumerable<int> JoeyTakeWhile4Numbers(IEnumerable<int> numbers)
-        {
-            using var enumerator = numbers.GetEnumerator();
-
-            while (enumerator.MoveNext())
-            {
-                var current = enumerator.Current;
-                if (current > 0)
                 {
                     yield return current;
                     continue;
