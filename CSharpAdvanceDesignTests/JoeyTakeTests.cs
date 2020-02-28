@@ -41,6 +41,18 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
+        [Test]
+        public void take_4_names()
+        {
+            var names = new[] {"Tom", "Joey", "David"};
+
+            var actual = JoeyTake4Names(names, 4);
+
+            var expected = new[] {"Tom", "Joey", "David"};
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
         private static IEnumerable<Employee> GetEmployees()
         {
             return new List<Employee>
@@ -57,6 +69,26 @@ namespace CSharpAdvanceDesignTests
         {
             var index = 0;
             using var enumerator = employees.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                if (index < count)
+                {
+                    yield return enumerator.Current;
+                }
+                else
+                {
+                    yield break;
+                }
+
+                index++;
+            }
+        }
+
+        private IEnumerable<string> JoeyTake4Names(IEnumerable<string> names, int count)
+        {
+            var index = 0;
+            using var enumerator = names.GetEnumerator();
 
             while (enumerator.MoveNext())
             {
