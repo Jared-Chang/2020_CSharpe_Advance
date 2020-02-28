@@ -40,13 +40,9 @@ namespace CSharpAdvanceDesignTests
         {
             using var enumerator = cards.GetEnumerator();
 
-            while (enumerator.MoveNext())
+            while (enumerator.MoveNext() && predicate(enumerator.Current))
             {
-                var current = enumerator.Current;
-                if (!predicate(current))
-                {
-                    break;
-                }
+                ;
             }
 
             do
