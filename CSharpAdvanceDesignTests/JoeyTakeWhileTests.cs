@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
@@ -21,7 +22,7 @@ namespace CSharpAdvanceDesignTests
                 new Card {Kind = CardKind.Normal, Point = 6}
             };
 
-            var actual = JoeyTakeWhile(cards);
+            var actual = JoeyTakeWhile(cards, current => current.Kind == CardKind.Normal);
 
             var expected = new List<Card>
             {
@@ -46,37 +47,20 @@ namespace CSharpAdvanceDesignTests
                 new Card {Kind = CardKind.Normal, Point = 6}
             };
 
-            var actual = JoeyTakeWhileForSeparate(cards);
+            var actual = JoeyTakeWhile(cards, current => current.Kind == CardKind.Separate);
 
             var expected = new List<Card>();
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Card> JoeyTakeWhile(IEnumerable<Card> cards)
+        private IEnumerable<Card> JoeyTakeWhile(IEnumerable<Card> cards, Func<Card, bool> predicate)
         {
             using var enumerator = cards.GetEnumerator();
 
             while (enumerator.MoveNext())
             {
                 var current = enumerator.Current;
-                if (current.Kind == CardKind.Normal)
-                {
-                    yield return current;
-                    continue;
-                }
-
-                yield break;
-            }
-        }
-
-        private IEnumerable<Card> JoeyTakeWhileForSeparate(IEnumerable<Card> cards)
-        {
-            using var enumerator = cards.GetEnumerator();
-
-            while (enumerator.MoveNext())
-            {
-                var current = enumerator.Current;
-                if (current.Kind == CardKind.Separate)
+                if (predicate(current))
                 {
                     yield return current;
                     continue;
