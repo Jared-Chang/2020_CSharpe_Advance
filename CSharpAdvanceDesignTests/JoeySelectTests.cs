@@ -45,6 +45,29 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldEqual(actual.ToList());
         }
 
+
+        [Test]
+        public void select_full_name()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"}
+            };
+
+            var actual = JoeySelectForEmployee(employees, employee => $"{employee.FirstName} {employee.LastName}");
+
+            var expected = new[]
+            {
+                "Joey Chen",
+                "Tom Li",
+                "David Chen"
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual.ToList());
+        }
+
         private static List<Employee> GetEmployees()
         {
             return new List<Employee>
@@ -70,6 +93,18 @@ namespace CSharpAdvanceDesignTests
             foreach (var url in urls)
             {
                 result.Add(replace(url));
+            }
+
+            return result;
+        }
+
+        private List<string> JoeySelectForEmployee(List<Employee> employees, Func<Employee, string> func)
+        {
+            var result = new List<string>();
+
+            foreach (var employee in employees)
+            {
+                result.Add(func(employee));
             }
 
             return result;
