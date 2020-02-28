@@ -1,19 +1,16 @@
-﻿using ExpectedObjects;
+﻿using System;
+using System.Collections.Generic;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
-    [TestFixture()]
-    [Ignore("not yet")]
+    [TestFixture]
     public class JoeySkipWhileTests
     {
         [Test]
-        public void skip_cards_until_separate_card()
+        public void skip_cards_kind_is_normal()
         {
             var cards = new List<Card>
             {
@@ -23,25 +20,39 @@ namespace CSharpAdvanceDesignTests
                 new Card {Kind = CardKind.Separate},
                 new Card {Kind = CardKind.Normal, Point = 5},
                 new Card {Kind = CardKind.Normal, Point = 6},
-                new Card {Kind = CardKind.Separate},
+                new Card {Kind = CardKind.Separate}
             };
 
-            var actual = JoeySkipWhile(cards);
+            var actual = JoeySkipWhile(cards, current => current.Kind == CardKind.Normal);
 
             var expected = new List<Card>
             {
                 new Card {Kind = CardKind.Separate},
                 new Card {Kind = CardKind.Normal, Point = 5},
                 new Card {Kind = CardKind.Normal, Point = 6},
-                new Card {Kind = CardKind.Separate},
+                new Card {Kind = CardKind.Separate}
             };
 
-            expected.ToExpectedObject().ShouldEqual(actual.ToList());
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Card> JoeySkipWhile(IEnumerable<Card> cards)
+        private IEnumerable<Card> JoeySkipWhile(IEnumerable<Card> cards, Func<Card, bool> predicate)
         {
-            throw new NotImplementedException();
+            using var enumerator = cards.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (!predicate(current))
+                {
+                    break;
+                }
+            }
+
+            do
+            {
+                yield return enumerator.Current;
+            } while (enumerator.MoveNext());
         }
     }
 }
