@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
@@ -36,7 +35,18 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Card> JoeyTakeWhile(IEnumerable<Card> cards)
         {
-            throw new NotImplementedException();
+            using var enumerator = cards.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (current.Kind != CardKind.Normal)
+                {
+                    yield break;
+                }
+
+                yield return current;
+            }
         }
     }
 }
