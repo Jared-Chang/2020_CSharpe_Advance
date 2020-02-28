@@ -115,5 +115,43 @@ namespace Lab
                 yield break;
             }
         }
+
+        public static IEnumerable<TResult> JoeyGroupSum<TSource, TResult>(this IEnumerable<TSource> sources,
+            Func<int, int> generateKey,
+            Func<TResult, TSource, TResult> accumulator, TResult defaultValue)
+        {
+            var groups = new Dictionary<int, List<TSource>>();
+
+            var index = 0;
+
+            foreach (var source in sources)
+            {
+                var groupKey = generateKey(index);
+                if (!groups.ContainsKey(groupKey))
+                {
+                    groups[groupKey] = new List<TSource>();
+                }
+
+                groups[groupKey].Add(source);
+
+                index++;
+            }
+
+            var sums = new List<TResult>();
+
+            foreach (var group in groups)
+            {
+                var sum = defaultValue;
+
+                foreach (var account in @group.Value)
+                {
+                    sum = accumulator(sum, account);
+                }
+
+                sums.Add(sum);
+            }
+
+            return sums;
+        }
     }
 }
