@@ -73,7 +73,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "May", LastName = "Chen"}
             };
 
-            var actual = JoeyWhereForEmployee(employees, employee => employee.FirstName.Length < 5);
+            var actual = JoeyWhere(employees, employee => employee.FirstName.Length < 5);
 
             var expected = new List<Employee>
             {
@@ -93,21 +93,6 @@ namespace CSharpAdvanceDesignTests
                 if (predicate(item))
                 {
                     list.Add(item);
-                }
-            }
-
-            return list;
-        }
-
-        private List<Employee> JoeyWhereForEmployee(List<Employee> employees, Func<Employee, bool> predicate)
-        {
-            var list = new List<Employee>();
-
-            foreach (var employee in employees)
-            {
-                if (predicate(employee))
-                {
-                    list.Add(employee);
                 }
             }
 
