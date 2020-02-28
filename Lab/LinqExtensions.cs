@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace Lab
 {
-    static public class LinqExtensions
+    public static class LinqExtensions
     {
-        public static List<TSource> JoeyWhere<TSource>(this List<TSource> source, Predicate<TSource> predicate)
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> source,
+            Predicate<TSource> predicate)
         {
             var list = new List<TSource>();
 
@@ -33,7 +34,8 @@ namespace Lab
             return result;
         }
 
-        public static List<TSource> JoeyWhere<TSource>(this List<TSource> source, Func<TSource, int, bool> predicate)
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, int, bool> predicate)
         {
             var result = new List<TSource>();
 
@@ -52,7 +54,7 @@ namespace Lab
             return result;
         }
 
-        public static List<TReturn> JoeySelect<TSource, TReturn>(this IEnumerable<TSource> source,
+        public static IEnumerable<TReturn> JoeySelect<TSource, TReturn>(this IEnumerable<TSource> source,
             Func<TSource, int, TReturn> selector)
         {
             var index = 0;
