@@ -6,6 +6,24 @@ using NUnit.Framework;
 
 namespace CSharpAdvanceDesignTests
 {
+    public class LinqExtensions
+    {
+        public static List<TSource> JoeyWhere<TSource>(List<TSource> source, Predicate<TSource> predicate)
+        {
+            var list = new List<TSource>();
+
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                {
+                    list.Add(item);
+                }
+            }
+
+            return list;
+        }
+    }
+
     [TestFixture]
     public class JoeyWhereTests
     {
@@ -24,7 +42,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = JoeyWhere(products, product => product.Price > 200 && product.Price < 500);
+            var actual = LinqExtensions.JoeyWhere(products, product => product.Price > 200 && product.Price < 500);
 
             var expected = new List<Product>
             {
@@ -51,7 +69,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = JoeyWhere(products,
+            var actual = LinqExtensions.JoeyWhere(products,
                 product => product.Price > 200 && product.Price < 500 && product.Cost < 30);
 
             var expected = new List<Product>
@@ -73,30 +91,15 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "May", LastName = "Chen"}
             };
 
-            var actual = JoeyWhere(employees, employee => employee.FirstName.Length < 5);
-
+            var actual = LinqExtensions.JoeyWhere(employees, employee => employee.FirstName.Length < 5);
             var expected = new List<Employee>
             {
                 new Employee {FirstName = "Joey", LastName = "Chen"},
                 new Employee {FirstName = "May", LastName = "Chen"}
             };
 
+
             expected.ToExpectedObject().ShouldMatch(actual);
-        }
-
-        private List<TSource> JoeyWhere<TSource>(List<TSource> source, Predicate<TSource> predicate)
-        {
-            var list = new List<TSource>();
-
-            foreach (var item in source)
-            {
-                if (predicate(item))
-                {
-                    list.Add(item);
-                }
-            }
-
-            return list;
         }
     }
 }
