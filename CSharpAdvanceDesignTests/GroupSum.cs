@@ -118,34 +118,35 @@ namespace CSharpAdvanceDesignTests
                 "1", "2", "3", "4", "5", "6", "7"
             };
 
-            var actual = JoeyGroupSum4String(strings, index => index / 3, (sum, aString) => sum + aString, "");
+            var actual = JoeyGroupSum(strings, index => index / 3, (sum, aString) => sum + aString, "");
 
             var expected = new[] {"123", "456", "7"};
 
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<int> JoeyGroupSum(IEnumerable<Account> accounts, Func<int, int> generateKey,
-            Func<int, Account, int> accumulator, int defaultValue)
+        private IEnumerable<TResult> JoeyGroupSum<TSource, TResult>(IEnumerable<TSource> sources,
+            Func<int, int> generateKey,
+            Func<TResult, TSource, TResult> accumulator, TResult defaultValue)
         {
-            var groups = new Dictionary<int, List<Account>>();
+            var groups = new Dictionary<int, List<TSource>>();
 
             var index = 0;
 
-            foreach (var account in accounts)
+            foreach (var source in sources)
             {
                 var groupKey = generateKey(index);
                 if (!groups.ContainsKey(groupKey))
                 {
-                    groups[groupKey] = new List<Account>();
+                    groups[groupKey] = new List<TSource>();
                 }
 
-                groups[groupKey].Add(account);
+                groups[groupKey].Add(source);
 
                 index++;
             }
 
-            var sums = new List<int>();
+            var sums = new List<TResult>();
 
             foreach (var group in groups)
             {
@@ -154,43 +155,6 @@ namespace CSharpAdvanceDesignTests
                 foreach (var account in group.Value)
                 {
                     sum = accumulator(sum, account);
-                }
-
-                sums.Add(sum);
-            }
-
-            return sums;
-        }
-
-        private IEnumerable<string> JoeyGroupSum4String(IEnumerable<string> strings, Func<int, int> generateKey,
-            Func<string, string, string> accumulator, string defaultValue)
-        {
-            var groups = new Dictionary<int, List<string>>();
-
-            var index = 0;
-
-            foreach (var aString in strings)
-            {
-                var groupKey = generateKey(index);
-                if (!groups.ContainsKey(groupKey))
-                {
-                    groups[groupKey] = new List<string>();
-                }
-
-                groups[groupKey].Add(aString);
-
-                index++;
-            }
-
-            var sums = new List<string>();
-
-            foreach (var group in groups)
-            {
-                var sum = defaultValue;
-
-                foreach (var aString in group.Value)
-                {
-                    sum = accumulator(sum, aString);
                 }
 
                 sums.Add(sum);
