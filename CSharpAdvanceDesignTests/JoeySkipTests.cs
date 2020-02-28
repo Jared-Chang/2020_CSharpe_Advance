@@ -21,7 +21,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joseph", LastName = "Yao"}
             };
 
-            var actual = JoeySkip(employees);
+            var actual = JoeySkip(employees, 2);
 
             var expected = new List<Employee>
             {
@@ -46,7 +46,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joseph", LastName = "Yao"}
             };
 
-            var actual = JoeySkip3(employees);
+            var actual = JoeySkip(employees, 3);
 
             var expected = new List<Employee>
             {
@@ -57,32 +57,11 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldEqual(actual.ToList());
         }
 
-        private IEnumerable<Employee> JoeySkip(IEnumerable<Employee> employees)
+        private IEnumerable<Employee> JoeySkip(IEnumerable<Employee> employees, int count)
         {
             using var enumerator = employees.GetEnumerator();
 
             var index = 0;
-            var count = 2;
-
-            while (enumerator.MoveNext()
-            )
-            {
-                if (index < count)
-                {
-                    index++;
-                    continue;
-                }
-
-                yield return enumerator.Current;
-            }
-        }
-
-        private IEnumerable<Employee> JoeySkip3(IEnumerable<Employee> employees)
-        {
-            using var enumerator = employees.GetEnumerator();
-
-            var index = 0;
-            var count = 3;
 
             while (enumerator.MoveNext()
             )
