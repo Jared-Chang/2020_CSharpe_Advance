@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ExpectedObjects;
 using Lab;
@@ -28,18 +29,19 @@ namespace CSharpAdvanceDesignTests
             };
 
             //sum of all Saving of each group which 3 Account per group
-            var actual = JoeyGroupSum(accounts);
+            var actual = JoeyGroupSum(accounts, 3, account => account.Saving);
 
             var expected = new[] {60, 150, 240, 210};
 
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<int> JoeyGroupSum(IEnumerable<Account> accounts)
+        private IEnumerable<int> JoeyGroupSum(IEnumerable<Account> accounts, int pageSize, Func<Account, int> selector)
         {
-            for (var i = 0; i < accounts.Count(); i += 3)
+            var list = accounts.ToList();
+            for (var i = 0; i < list.Count; i += pageSize)
             {
-                yield return accounts.JoeySkip(i).JoeyTake(3).Sum(account => account.Saving);
+                yield return list.JoeySkip(i).JoeyTake(pageSize).Sum(selector);
             }
         }
     }
