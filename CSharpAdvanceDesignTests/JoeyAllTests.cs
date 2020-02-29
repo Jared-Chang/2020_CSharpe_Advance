@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lab;
 using Lab.Entities;
 using NUnit.Framework;
 
@@ -20,7 +21,7 @@ namespace CSharpAdvanceDesignTests
                 new Girl {Age = 30}
             };
 
-            var actual = JoeyAll(girls, girl => girl.Age >= 18);
+            var actual = girls.JoeyAll(girl => girl.Age >= 18);
             Assert.IsFalse(actual);
         }
 
@@ -36,7 +37,7 @@ namespace CSharpAdvanceDesignTests
                 new Girl {Age = 30}
             };
 
-            var actual = JoeyAll(girls, girl => girl.Age <= 30);
+            var actual = girls.JoeyAll(girl => girl.Age <= 30);
             Assert.IsTrue(actual);
         }
 
@@ -51,21 +52,8 @@ namespace CSharpAdvanceDesignTests
             };
 
             Func<string, bool> predicate = name => name == "joey";
-            var actual = JoeyAll(names, predicate);
+            var actual = names.JoeyAll(predicate);
             Assert.IsFalse(actual);
-        }
-
-        private bool JoeyAll<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            foreach (var item in source)
-            {
-                if (!predicate(item))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
     }
 }
