@@ -106,15 +106,7 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
 
-                    int finalResult = 0;
-
-                    var firstCompareResult = comboCompare.FirstComparer.Compare(employee, minElement);
-                    var secondCompareResult = comboCompare.SecondComparer.Compare(employee, minElement);
-
-                    if (firstCompareResult < 0 || firstCompareResult == 0 && secondCompareResult < 0)
-                    {
-                        finalResult = firstCompareResult - secondCompareResult;
-                    }
+                    var finalResult = Compare(comboCompare, employee, minElement);
 
                     if (finalResult < 0)
                     {
@@ -126,6 +118,21 @@ namespace CSharpAdvanceDesignTests
                 elements.RemoveAt(index);
                 yield return minElement;
             }
+        }
+
+        private static int Compare(ComboCompare comboCompare, Employee employee, Employee minElement)
+        {
+            int finalResult = 0;
+
+            var firstCompareResult = comboCompare.FirstComparer.Compare(employee, minElement);
+            var secondCompareResult = comboCompare.SecondComparer.Compare(employee, minElement);
+
+            if (firstCompareResult < 0 || firstCompareResult == 0 && secondCompareResult < 0)
+            {
+                finalResult = firstCompareResult - secondCompareResult;
+            }
+
+            return finalResult;
         }
     }
 }
