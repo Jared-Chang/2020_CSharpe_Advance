@@ -18,7 +18,7 @@ namespace CSharpAdvanceDesignTests
         public Func<Employee, string> KeySelector { get; private set; }
         public IComparer<string> KeyComparer { get; private set; }
 
-        public int Compare(Employee employee, Employee minElement)
+        public int Compare(Employee employee, Employee minElement) 
         {
             return KeyComparer.Compare(KeySelector(employee), KeySelector(minElement));
         }
@@ -79,7 +79,7 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
             IEnumerable<Employee> employees, 
-            CombindKeyComparer combindKeyComparer,
+            IComparer<Employee> combindKeyComparer,
             Func<Employee, string> secondKeySelector,
             IComparer<string> secondKeyComparer)
         {
