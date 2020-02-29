@@ -34,6 +34,21 @@ namespace CSharpAdvanceDesignTests
 
         public IComparer<Employee> FirstComparer { get; }
         public IComparer<Employee> SecondComparer { get; }
+
+        public int Compare(Employee employee, Employee minElement)
+        {
+            int finalResult = 0;
+
+            var firstCompareResult = FirstComparer.Compare(employee, minElement);
+            var secondCompareResult = SecondComparer.Compare(employee, minElement);
+
+            if (firstCompareResult < 0 || firstCompareResult == 0 && secondCompareResult < 0)
+            {
+                finalResult = firstCompareResult - secondCompareResult;
+            }
+
+            return finalResult;
+        }
     }
 
     [TestFixture]
@@ -106,7 +121,7 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
 
-                    var finalResult = Compare(comboCompare, employee, minElement);
+                    var finalResult = comboCompare.Compare(employee, minElement);
 
                     if (finalResult < 0)
                     {
@@ -118,21 +133,6 @@ namespace CSharpAdvanceDesignTests
                 elements.RemoveAt(index);
                 yield return minElement;
             }
-        }
-
-        private static int Compare(ComboCompare comboCompare, Employee employee, Employee minElement)
-        {
-            int finalResult = 0;
-
-            var firstCompareResult = comboCompare.FirstComparer.Compare(employee, minElement);
-            var secondCompareResult = comboCompare.SecondComparer.Compare(employee, minElement);
-
-            if (firstCompareResult < 0 || firstCompareResult == 0 && secondCompareResult < 0)
-            {
-                finalResult = firstCompareResult - secondCompareResult;
-            }
-
-            return finalResult;
         }
     }
 }
