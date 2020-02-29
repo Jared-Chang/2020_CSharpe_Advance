@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace CSharpAdvanceDesignTests
 {
-    public class CombindKeyComparer
+    public class CombindKeyComparer : IComparer<Employee>
     {
         public CombindKeyComparer(Func<Employee, string> keySelector, IComparer<string> keyComparer)
         {
@@ -20,10 +20,7 @@ namespace CSharpAdvanceDesignTests
 
         public int Compare(Employee employee, Employee minElement)
         {
-            var firstCompareResult =
-                KeyComparer.Compare(KeySelector(employee),
-                    KeySelector(minElement));
-            return firstCompareResult;
+            return KeyComparer.Compare(KeySelector(employee), KeySelector(minElement));
         }
     }
 
