@@ -40,11 +40,26 @@ namespace CSharpAdvanceDesignTests
             Assert.IsTrue(actual);
         }
 
-        private bool JoeyAll(IEnumerable<Girl> girls, Func<Girl, bool> predicate)
+        [Test]
+        public void all_strings_equal_joey()
         {
-            foreach (var girl in girls)
+            var names = new[]
             {
-                if (!predicate(girl))
+                "joey",
+                "jared",
+                "jack"
+            };
+
+            Func<string, bool> predicate = name => name == "joey";
+            var actual = JoeyAll(names, predicate);
+            Assert.IsFalse(actual);
+        }
+
+        private bool JoeyAll<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            foreach (var item in source)
+            {
+                if (!predicate(item))
                 {
                     return false;
                 }
