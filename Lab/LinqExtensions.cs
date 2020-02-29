@@ -144,5 +144,20 @@ namespace Lab
 
             return true;
         }
+
+        public static TSource JoeyFirst<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (predicate(current))
+                {
+                    return current;
+                }
+            }
+
+            throw new InvalidOperationException($"{nameof(source)} has no expected result");
+        }
     }
 }
