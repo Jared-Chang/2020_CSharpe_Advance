@@ -7,6 +7,18 @@ using NUnit.Framework;
 
 namespace CSharpAdvanceDesignTests
 {
+    public class CombindKeyComparer
+    {
+        public CombindKeyComparer(Func<Employee, string> keySelector, IComparer<string> keyComparer)
+        {
+            KeySelector = keySelector;
+            KeyComparer = keyComparer;
+        }
+
+        public Func<Employee, string> KeySelector { get; private set; }
+        public IComparer<string> KeyComparer { get; private set; }
+    }
+
     [TestFixture]
     public class JoeyOrderByTests
     {
@@ -46,11 +58,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             var actual =
-                JoeyOrderByLastNameAndFirstName(employees,
-                    employee => employee.LastName,
-                    Comparer<string>.Default,
-                    employee => employee.FirstName,
-                    Comparer<string>.Default);
+                JoeyOrderByLastNameAndFirstName(employees, new CombindKeyComparer(employee => employee.LastName, Comparer<string>.Default), employee => employee.FirstName, Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -65,9 +73,8 @@ namespace CSharpAdvanceDesignTests
         }
 
         private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
-            IEnumerable<Employee> employees,
-            Func<Employee, string> firstKeySelector,
-            IComparer<string> firstKeyComparer,
+            IEnumerable<Employee> employees, 
+            CombindKeyComparer combindKeyComparer,
             Func<Employee, string> secondKeySelector,
             IComparer<string> secondKeyComparer)
         {
@@ -81,7 +88,7 @@ namespace CSharpAdvanceDesignTests
                     var employee = elements[i];
 
                     var firstCompareResult =
-                        firstKeyComparer.Compare(firstKeySelector(employee), firstKeySelector(minElement));
+                        combindKeyComparer.KeyComparer.Compare(combindKeyComparer.KeySelector(employee), combindKeyComparer.KeySelector(minElement));
                     var secondCompareResult =
                         secondKeyComparer.Compare(secondKeySelector(employee), secondKeySelector(minElement));
 
