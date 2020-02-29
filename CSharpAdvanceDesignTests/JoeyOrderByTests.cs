@@ -17,6 +17,14 @@ namespace CSharpAdvanceDesignTests
 
         public Func<Employee, string> KeySelector { get; private set; }
         public IComparer<string> KeyComparer { get; private set; }
+
+        public int Compare(Employee employee, Employee minElement)
+        {
+            var firstCompareResult =
+                KeyComparer.Compare(KeySelector(employee),
+                    KeySelector(minElement));
+            return firstCompareResult;
+        }
     }
 
     [TestFixture]
@@ -87,7 +95,7 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
 
-                    var firstCompareResult = Compare(combindKeyComparer, employee, minElement);
+                    var firstCompareResult = combindKeyComparer.Compare(employee, minElement);
                     var secondCompareResult =
                         secondKeyComparer.Compare(secondKeySelector(employee), secondKeySelector(minElement));
 
@@ -101,14 +109,6 @@ namespace CSharpAdvanceDesignTests
                 elements.RemoveAt(index);
                 yield return minElement;
             }
-        }
-
-        private static int Compare(CombindKeyComparer combindKeyComparer, Employee employee, Employee minElement)
-        {
-            var firstCompareResult =
-                combindKeyComparer.KeyComparer.Compare(combindKeyComparer.KeySelector(employee),
-                    combindKeyComparer.KeySelector(minElement));
-            return firstCompareResult;
         }
     }
 }
