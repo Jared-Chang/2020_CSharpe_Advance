@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lab
 {
@@ -158,6 +159,22 @@ namespace Lab
             }
 
             throw new InvalidOperationException($"{nameof(source)} has no expected result");
+        }
+
+        public static TSource JoeyLast<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            using var enumerator = source.Reverse().GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+
+                if (predicate(current))
+                {
+                    return current;
+                }
+            }
+
+            throw new InvalidOperationException($"{nameof(source)} is no matched result");
         }
     }
 }

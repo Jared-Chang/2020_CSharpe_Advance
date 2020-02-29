@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ExpectedObjects;
+using Lab;
 using Lab.Entities;
 using NUnit.Framework;
 
@@ -21,7 +22,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Cash", LastName = "Li"}
             };
 
-            var employee = JoeyLast(employees, employee1 => true);
+            var employee = employees.JoeyLast(employee1 => true);
 
             new Employee {FirstName = "Cash", LastName = "Li"}
                 .ToExpectedObject().ShouldMatch(employee);
@@ -38,10 +39,24 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Cash", LastName = "Li"}
             };
 
-            var employee = JoeyLast(employees, current => current.LastName == "Chen");
+            var employee = employees.JoeyLast(current => current.LastName == "Chen");
 
             new Employee {FirstName = "David", LastName = "Chen"}
                 .ToExpectedObject().ShouldMatch(employee);
+        }
+
+        [Test]
+        public void get_last_number_GT_10()
+        {
+            var numbers = new[]
+            {
+                1, 2, 3, 4, 5, 15, 50, 5, 2
+            };
+
+            Func<int, bool> predicate = current => current > 10;
+            var employee = numbers.JoeyLast(predicate);
+
+            50.ToExpectedObject().ShouldMatch(employee);
         }
 
         [Test]
@@ -51,24 +66,8 @@ namespace CSharpAdvanceDesignTests
             {
             };
 
-            TestDelegate action = () => JoeyLast(employees, employee => true);
+            TestDelegate action = () => employees.JoeyLast(employee => true);
             Assert.Throws<InvalidOperationException>(action);
-        }
-
-        private Employee JoeyLast(IEnumerable<Employee> employees, Func<Employee, bool> predicate)
-        {
-            using var enumerator = employees.Reverse().GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var current = enumerator.Current;
-
-                if (predicate(current))
-                {
-                    return current;
-                }
-            }
-
-            throw new InvalidOperationException($"{nameof(employees)} is no matched result");
         }
     }
 }
