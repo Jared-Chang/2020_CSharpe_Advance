@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ExpectedObjects;
 using Lab.Entities;
@@ -44,7 +45,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"}
             };
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees);
+            var actual = JoeyOrderByLastNameAndFirstName(employees, employee => employee.LastName);
 
             var expected = new[]
             {
@@ -58,7 +59,8 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees)
+        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees,
+            Func<Employee, string> firstSelector)
         {
             var stringComparer = Comparer<string>.Default;
             var elements = employees.ToList();
@@ -69,12 +71,12 @@ namespace CSharpAdvanceDesignTests
                 for (var i = 1; i < elements.Count; i++)
                 {
                     var employee = elements[i];
-                    if (stringComparer.Compare(employee.LastName, minElement.LastName) < 0)
+                    if (stringComparer.Compare(firstSelector(employee), minElement.LastName) < 0)
                     {
                         minElement = employee;
                         index = i;
                     }
-                    else if (stringComparer.Compare(employee.LastName, minElement.LastName) == 0)
+                    else if (stringComparer.Compare(firstSelector(employee), minElement.LastName) == 0)
                     {
                         if (stringComparer.Compare(employee.FirstName, minElement.FirstName) < 0)
                         {
