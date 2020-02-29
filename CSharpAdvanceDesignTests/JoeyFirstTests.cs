@@ -1,12 +1,11 @@
-﻿using ExpectedObjects;
+﻿using System.Collections.Generic;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyFirstTests
     {
         [Test]
@@ -14,20 +13,27 @@ namespace CSharpAdvanceDesignTests
         {
             var girls = new[]
             {
-                new Girl(){Age = 10},
-                new Girl(){Age = 20},
-                new Girl(){Age = 30},
+                new Girl {Age = 10},
+                new Girl {Age = 20},
+                new Girl {Age = 30}
             };
 
             var girl = JoeyFirst(girls);
-            var expected = new Girl { Age = 10 };
+            var expected = new Girl {Age = 10};
 
-            expected.ToExpectedObject().ShouldEqual(girl);
+            expected.ToExpectedObject().ShouldMatch(girl);
         }
 
         private Girl JoeyFirst(IEnumerable<Girl> girls)
         {
-            throw new System.NotImplementedException();
+            using var enumerator = girls.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                return current;
+            }
+
+            return null;
         }
     }
 }
