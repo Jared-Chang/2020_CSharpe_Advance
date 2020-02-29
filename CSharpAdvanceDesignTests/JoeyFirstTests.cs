@@ -41,6 +41,19 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(girl);
         }
 
+        [Test]
+        public void girl_is_empty_should_throw_exception()
+        {
+            var girls = new Girl[]
+            {
+            };
+
+            TestDelegate action = () => JoeyFirst(girls, current => current.Age > 25);
+
+            Assert.Throws<InvalidOperationException>(action,
+                "girls has no expected result");
+        }
+
         private Girl JoeyFirst(IEnumerable<Girl> girls, Func<Girl, bool> predicate)
         {
             using var enumerator = girls.GetEnumerator();
@@ -53,7 +66,7 @@ namespace CSharpAdvanceDesignTests
                 }
             }
 
-            throw new InvalidOperationException();
+            throw new InvalidOperationException($"{nameof(girls)} has no expected result");
         }
     }
 }
