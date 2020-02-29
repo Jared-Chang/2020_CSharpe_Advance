@@ -115,5 +115,21 @@ namespace Lab
                 yield break;
             }
         }
+
+        public static bool JoeyAny<TSource>(this IEnumerable<TSource> numbers, Func<TSource, bool> predicate)
+        {
+            using var enumerator = numbers.GetEnumerator();
+
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (predicate(current))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
