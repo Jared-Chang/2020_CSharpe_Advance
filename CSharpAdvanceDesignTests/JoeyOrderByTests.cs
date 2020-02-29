@@ -18,7 +18,7 @@ namespace CSharpAdvanceDesignTests
         private Func<Employee, string> KeySelector { get; }
         private IComparer<string> KeyComparer { get; }
 
-        public int Compare(Employee employee, Employee minElement) 
+        public int Compare(Employee employee, Employee minElement)
         {
             return KeyComparer.Compare(KeySelector(employee), KeySelector(minElement));
         }
@@ -32,8 +32,8 @@ namespace CSharpAdvanceDesignTests
             SecondComparer = secondComparer;
         }
 
-        public IComparer<Employee> FirstComparer { get; private set; }
-        public IComparer<Employee> SecondComparer { get; private set; }
+        public IComparer<Employee> FirstComparer { get; }
+        public IComparer<Employee> SecondComparer { get; }
     }
 
     [TestFixture]
@@ -77,7 +77,9 @@ namespace CSharpAdvanceDesignTests
             Func<Employee, string> secondKeySelector = employee => employee.FirstName;
             IComparer<string> secondKeyComparer = Comparer<string>.Default;
             var actual =
-                JoeyOrderByLastNameAndFirstName(employees, new ComboCompare(new CombineKeyComparer(employee => employee.LastName, Comparer<string>.Default), new CombineKeyComparer(secondKeySelector, secondKeyComparer)));
+                JoeyOrderByLastNameAndFirstName(employees,
+                    new ComboCompare(new CombineKeyComparer(employee => employee.LastName, Comparer<string>.Default),
+                        new CombineKeyComparer(secondKeySelector, secondKeyComparer)));
 
             var expected = new[]
             {
@@ -104,10 +106,17 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
 
+                    int finalResult = 0;
+
                     var firstCompareResult = comboCompare.FirstComparer.Compare(employee, minElement);
                     var secondCompareResult = comboCompare.SecondComparer.Compare(employee, minElement);
 
                     if (firstCompareResult < 0 || firstCompareResult == 0 && secondCompareResult < 0)
+                    {
+                        finalResult = firstCompareResult - secondCompareResult;
+                    }
+
+                    if (finalResult < 0)
                     {
                         minElement = employee;
                         index = i;
