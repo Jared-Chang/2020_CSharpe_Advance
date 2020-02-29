@@ -180,5 +180,24 @@ namespace Lab
 
             return hasMatch ? result : throw new InvalidOperationException($"{nameof(source)} is no matched result");
         }
+
+        public static TSource JoeyLastOrDefault<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate)
+        {
+            using var enumerator = source.GetEnumerator();
+            var result = default(TSource);
+
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+
+                if (predicate(current))
+                {
+                    result = current;
+                }
+            }
+
+            return result;
+        }
     }
 }
