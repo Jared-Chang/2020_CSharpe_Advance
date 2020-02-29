@@ -50,13 +50,27 @@ namespace CSharpAdvanceDesignTests
 
             TestDelegate action = () => JoeyFirst(girls, current => current.Age > 25);
 
-            Assert.Throws<InvalidOperationException>(action,
-                "girls has no expected result");
+            Assert.Throws<InvalidOperationException>(action);
         }
 
-        private Girl JoeyFirst(IEnumerable<Girl> girls, Func<Girl, bool> predicate)
+        [Test]
+        public void first_number_GT_10()
         {
-            using var enumerator = girls.GetEnumerator();
+            var numbers = new[]
+            {
+                1, 2, 50, 60, 5
+            };
+
+            Func<int, bool> predicate = current => current > 10;
+            var girl = JoeyFirst(numbers, predicate);
+            var expected = 50;
+
+            expected.ToExpectedObject().ShouldMatch(girl);
+        }
+
+        private TSource JoeyFirst<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            using var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 var current = enumerator.Current;
@@ -66,7 +80,7 @@ namespace CSharpAdvanceDesignTests
                 }
             }
 
-            throw new InvalidOperationException($"{nameof(girls)} has no expected result");
+            throw new InvalidOperationException($"{nameof(source)} has no expected result");
         }
     }
 }
