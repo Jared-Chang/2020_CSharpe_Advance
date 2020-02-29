@@ -7,9 +7,9 @@ using NUnit.Framework;
 
 namespace CSharpAdvanceDesignTests
 {
-    public class CombindKeyComparer : IComparer<Employee>
+    public class CombineKeyComparer : IComparer<Employee>
     {
-        public CombindKeyComparer(Func<Employee, string> keySelector, IComparer<string> keyComparer)
+        public CombineKeyComparer(Func<Employee, string> keySelector, IComparer<string> keyComparer)
         {
             KeySelector = keySelector;
             KeyComparer = keyComparer;
@@ -63,7 +63,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             var actual =
-                JoeyOrderByLastNameAndFirstName(employees, new CombindKeyComparer(employee => employee.LastName, Comparer<string>.Default), employee => employee.FirstName, Comparer<string>.Default);
+                JoeyOrderByLastNameAndFirstName(employees, new CombineKeyComparer(employee => employee.LastName, Comparer<string>.Default), employee => employee.FirstName, Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -79,7 +79,7 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
             IEnumerable<Employee> employees, 
-            IComparer<Employee> combindKeyComparer,
+            IComparer<Employee> firstComparer,
             Func<Employee, string> secondKeySelector,
             IComparer<string> secondKeyComparer)
         {
@@ -92,7 +92,7 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
 
-                    var firstCompareResult = combindKeyComparer.Compare(employee, minElement);
+                    var firstCompareResult = firstComparer.Compare(employee, minElement);
                     var secondCompareResult =
                         secondKeyComparer.Compare(secondKeySelector(employee), secondKeySelector(minElement));
 
