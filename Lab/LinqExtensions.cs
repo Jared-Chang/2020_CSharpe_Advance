@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Lab
 {
@@ -100,7 +99,8 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TSource> JoeyTakeWhile<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static IEnumerable<TSource> JoeyTakeWhile<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate)
         {
             using var enumerator = source.GetEnumerator();
 
@@ -163,18 +163,22 @@ namespace Lab
 
         public static TSource JoeyLast<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            using var enumerator = source.Reverse().GetEnumerator();
+            using var enumerator = source.GetEnumerator();
+            var hasMatch = false;
+            var result = default(TSource);
+
             while (enumerator.MoveNext())
             {
                 var current = enumerator.Current;
 
                 if (predicate(current))
                 {
-                    return current;
+                    hasMatch = true;
+                    result = current;
                 }
             }
 
-            throw new InvalidOperationException($"{nameof(source)} is no matched result");
+            return hasMatch ? result : throw new InvalidOperationException($"{nameof(source)} is no matched result");
         }
     }
 }
