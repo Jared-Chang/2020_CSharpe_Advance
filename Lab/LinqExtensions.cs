@@ -99,7 +99,8 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TSource> JoeyTakeWhile<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static IEnumerable<TSource> JoeyTakeWhile<TSource>(this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate)
         {
             using var enumerator = source.GetEnumerator();
 
@@ -137,21 +138,18 @@ namespace Lab
                 index++;
             }
 
-            var sums = new List<TResult>();
 
             foreach (var group in groups)
             {
                 var sum = defaultValue;
 
-                foreach (var account in @group.Value)
+                foreach (var account in group.Value)
                 {
                     sum = accumulator(sum, account);
                 }
 
-                sums.Add(sum);
+                yield return sum;
             }
-
-            return sums;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ExpectedObjects;
+﻿using ExpectedObjects;
 using Lab;
 using NUnit.Framework;
 
