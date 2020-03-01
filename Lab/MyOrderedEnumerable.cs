@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lab.Entities;
@@ -7,13 +8,23 @@ namespace Lab
 {
     public class MyOrderedEnumerable : IEnumerable<Employee>
     {
-        private readonly IEnumerable<Employee> _employees;
         private readonly IComparer<Employee> _combineKeyComparer;
+        private readonly IEnumerable<Employee> _employees;
 
         public MyOrderedEnumerable(IEnumerable<Employee> employees, IComparer<Employee> combineKeyComparer)
         {
             _employees = employees;
             _combineKeyComparer = combineKeyComparer;
+        }
+
+        public IEnumerator<Employee> GetEnumerator()
+        {
+            return _employees.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public static IEnumerable<Employee> JoeySort(IEnumerable<Employee> employees,
@@ -40,14 +51,9 @@ namespace Lab
             }
         }
 
-        public IEnumerator<Employee> GetEnumerator()
+        public MyOrderedEnumerable Append(IComparer<Employee> combineKeyComparer)
         {
-            throw new System.NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            return this;
         }
     }
 }

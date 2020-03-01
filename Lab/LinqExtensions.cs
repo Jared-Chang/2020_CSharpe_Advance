@@ -202,17 +202,18 @@ namespace Lab
             return result;
         }
 
-        public static IEnumerable<Employee> JoeyOrderBy<TKey>(this IEnumerable<Employee> employees,
+        public static MyOrderedEnumerable JoeyOrderBy<TKey>(this IEnumerable<Employee> employees,
             Func<Employee, TKey> keySelector)
         {
             return new MyOrderedEnumerable(employees,
                 new CombineKeyComparer<TKey>(keySelector, Comparer<TKey>.Default));
         }
 
-        public static IEnumerable<Employee> JoeyThenBy<TKey>(this IEnumerable<Employee> employees,
+        public static MyOrderedEnumerable JoeyThenBy<TKey>(this MyOrderedEnumerable myOrderedEnumerable,
             Func<Employee, TKey> keySelector)
         {
-            return employees;
+            IComparer<Employee> combineKeyComparer = new CombineKeyComparer<TKey>( keySelector, Comparer<TKey>.Default);
+            return myOrderedEnumerable.Append(combineKeyComparer);
         }
     }
 }
