@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lab.Entities;
@@ -8,8 +7,8 @@ namespace Lab
 {
     public class MyOrderedEnumerable : IEnumerable<Employee>
     {
-        private IComparer<Employee> _untilNowComparer;
         private readonly IEnumerable<Employee> _source;
+        private IComparer<Employee> _untilNowComparer;
 
         public MyOrderedEnumerable(IEnumerable<Employee> source, IComparer<Employee> untilNowComparer)
         {
