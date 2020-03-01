@@ -31,6 +31,12 @@ namespace Lab
             return GetEnumerator();
         }
 
+        public IMyOrderedEnumerable Append(IComparer<Employee> currentComparer)
+        {
+            _untilNowComparer = new ComboComparer(_untilNowComparer, currentComparer);
+            return this;
+        }
+
         public IEnumerator<Employee> JoeySort(IEnumerable<Employee> employees,
             IComparer<Employee> comboComparer)
         {
@@ -53,12 +59,6 @@ namespace Lab
                 elements.RemoveAt(index);
                 yield return minElement;
             }
-        }
-
-        public IMyOrderedEnumerable Append(IComparer<Employee> currentComparer)
-        {
-            _untilNowComparer = new ComboComparer(_untilNowComparer, currentComparer);
-            return this;
         }
     }
 }
