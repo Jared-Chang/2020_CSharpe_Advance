@@ -46,17 +46,18 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Tuple<string, string>> JoeyJoin(
-            IEnumerable<Employee> employees,
-            IEnumerable<Pet> pets,
-            Func<Employee, Employee> outterKeySelector,
-            Func<Pet, Employee> innerKeySelector,
-            Func<Employee, Pet, Tuple<string, string>> resultSelector,
-            EqualityComparer<Employee> equalityComparer)
+        private IEnumerable<TResult> JoeyJoin<TOutter, TInner, TKey, TResult>(
+            IEnumerable<TOutter> employees,
+            IEnumerable<TInner> pets,
+            Func<TOutter, TKey> outterKeySelector,
+            Func<TInner, TKey> innerKeySelector,
+            Func<TOutter, TInner, TResult> resultSelector,
+            EqualityComparer<TKey> equalityComparer)
         {
             foreach (var employee in employees)
             {
-                foreach (var pet in pets.Where(p =>  equalityComparer.Equals(outterKeySelector(employee), innerKeySelector(p))))
+                foreach (var pet in pets.Where(p =>
+                    equalityComparer.Equals(outterKeySelector(employee), innerKeySelector(p))))
                 {
                     yield return resultSelector(employee, pet);
                 }
