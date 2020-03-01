@@ -1,21 +1,21 @@
-﻿using ExpectedObjects;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyJoinTests
     {
         [Test]
         public void all_pets_and_owner()
         {
-            var david = new Employee { FirstName = "David", LastName = "Chen" };
-            var joey = new Employee { FirstName = "Joey", LastName = "Chen" };
-            var tom = new Employee { FirstName = "Tom", LastName = "Chen" };
+            var david = new Employee {FirstName = "David", LastName = "Chen"};
+            var joey = new Employee {FirstName = "Joey", LastName = "Chen"};
+            var tom = new Employee {FirstName = "Tom", LastName = "Chen"};
 
             var employees = new[]
             {
@@ -24,12 +24,12 @@ namespace CSharpAdvanceDesignTests
                 tom
             };
 
-            var pets = new Pet[]
+            var pets = new[]
             {
-                new Pet() {Name = "Lala", Owner = joey},
-                new Pet() {Name = "Didi", Owner = david},
-                new Pet() {Name = "Fufu", Owner = tom},
-                new Pet() {Name = "QQ", Owner = joey},
+                new Pet {Name = "Lala", Owner = joey},
+                new Pet {Name = "Didi", Owner = david},
+                new Pet {Name = "Fufu", Owner = tom},
+                new Pet {Name = "QQ", Owner = joey}
             };
 
             var actual = JoeyJoin(employees, pets);
@@ -39,7 +39,7 @@ namespace CSharpAdvanceDesignTests
                 Tuple.Create("David", "Didi"),
                 Tuple.Create("Joey", "Lala"),
                 Tuple.Create("Joey", "QQ"),
-                Tuple.Create("Tom", "Fufu"),
+                Tuple.Create("Tom", "Fufu")
             };
 
             expected.ToExpectedObject().ShouldMatch(actual);
@@ -47,7 +47,13 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Tuple<string, string>> JoeyJoin(IEnumerable<Employee> employees, IEnumerable<Pet> pets)
         {
-            throw new NotImplementedException();
+            foreach (var employee in employees)
+            {
+                foreach (var pet in pets.Where(p => p.Owner == employee))
+                {
+                    yield return Tuple.Create(pet.Owner.FirstName, pet.Name);
+                }
+            }
         }
     }
 }
