@@ -32,8 +32,13 @@ namespace CSharpAdvanceDesignTests
                 new Pet {Name = "QQ", Owner = joey}
             };
 
-            var actual = JoeyJoin(employees, pets, employee => employee, arg => arg.Owner,
-                (employee1, pet) => Tuple.Create(employee1.FirstName, pet.Name), EqualityComparer<Employee>.Default);
+            var actual = JoeyJoin(
+                employees,
+                pets,
+                employee => employee,
+                pet => pet.Owner,
+                (employee, pet) => Tuple.Create(employee.FirstName, pet.Name),
+                EqualityComparer<Employee>.Default);
 
             var expected = new[]
             {
@@ -52,7 +57,7 @@ namespace CSharpAdvanceDesignTests
             Func<TOutter, TKey> outterKeySelector,
             Func<TInner, TKey> innerKeySelector,
             Func<TOutter, TInner, TResult> resultSelector,
-            EqualityComparer<TKey> equalityComparer)
+            IEqualityComparer<TKey> equalityComparer)
         {
             foreach (var employee in employees)
             {
