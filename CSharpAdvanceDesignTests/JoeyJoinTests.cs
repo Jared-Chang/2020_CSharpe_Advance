@@ -33,7 +33,7 @@ namespace CSharpAdvanceDesignTests
             };
 
             var actual = JoeyJoin(employees, pets, employee => employee, arg => arg.Owner,
-                (employee1, pet) => Tuple.Create(employee1.FirstName, pet.Name));
+                (employee1, pet) => Tuple.Create(employee1.FirstName, pet.Name), EqualityComparer<Employee>.Default);
 
             var expected = new[]
             {
@@ -51,13 +51,12 @@ namespace CSharpAdvanceDesignTests
             IEnumerable<Pet> pets,
             Func<Employee, Employee> outterKeySelector,
             Func<Pet, Employee> innerKeySelector,
-            Func<Employee, Pet, Tuple<string, string>> resultSelector)
+            Func<Employee, Pet, Tuple<string, string>> resultSelector,
+            EqualityComparer<Employee> equalityComparer)
         {
             foreach (var employee in employees)
             {
-                var equalityComparer = EqualityComparer<Employee>.Default;
-                foreach (var pet in pets.Where(p =>
-                    equalityComparer.Equals(outterKeySelector(employee), innerKeySelector(p))))
+                foreach (var pet in pets.Where(p =>  equalityComparer.Equals(outterKeySelector(employee), innerKeySelector(p))))
                 {
                     yield return resultSelector(employee, pet);
                 }
