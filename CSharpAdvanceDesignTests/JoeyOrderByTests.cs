@@ -51,29 +51,30 @@ namespace CSharpAdvanceDesignTests
     [TestFixture]
     public class JoeyOrderByTests
     {
-        //[Test]
-        //public void orderBy_lastName()
-        //{
-        //    var employees = new[]
-        //    {
-        //        new Employee {FirstName = "Joey", LastName = "Wang"},
-        //        new Employee {FirstName = "Tom", LastName = "Li"},
-        //        new Employee {FirstName = "Joseph", LastName = "Chen"},
-        //        new Employee {FirstName = "Joey", LastName = "Chen"}
-        //    };
+        [Test]
+        public void orderBy_lastName()
+        {
+            var employees = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Joey", LastName = "Chen"}
+            };
 
-        //    var actual = JoeyOrderByLastNameAndFirstName(employees);
+            var actual = JoeyOrderByLastNameAndFirstName(employees,
+                new CombineKeyComparer(element => element.LastName, Comparer<string>.Default));
 
-        //    var expected = new[]
-        //    {
-        //        new Employee {FirstName = "Joseph", LastName = "Chen"},
-        //        new Employee {FirstName = "Joey", LastName = "Chen"},
-        //        new Employee {FirstName = "Tom", LastName = "Li"},
-        //        new Employee {FirstName = "Joey", LastName = "Wang"}
-        //    };
+            var expected = new[]
+            {
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joey", LastName = "Wang"}
+            };
 
-        //    expected.ToExpectedObject().ShouldMatch(actual);
-        //}
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
 
         [Test]
         public void orderBy_lastName_and_firstName()
@@ -88,7 +89,7 @@ namespace CSharpAdvanceDesignTests
 
             var comboComparer = new ComboComparer(
                 new CombineKeyComparer(element => element.LastName, Comparer<string>.Default),
-                new CombineKeyComparer(element1 => element1.FirstName, Comparer<string>.Default));
+                new CombineKeyComparer(employee => employee.FirstName, Comparer<string>.Default));
 
             var actual = JoeyOrderByLastNameAndFirstName(employees, comboComparer);
 
