@@ -45,12 +45,34 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<int> Distinct(IEnumerable<int> numbers)
         {
-            return new HashSet<int>(numbers);
+            var hashSet = new HashSet<int>();
+
+            using var enumerator = numbers.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+
+                if (hashSet.Add(current))
+                {
+                    yield return current;
+                }
+            }
         }
 
         private IEnumerable<Employee> JoeyDistinct(IEnumerable<Employee> employees)
         {
-            return new HashSet<Employee>(employees, new FullNameEqualityComparer());
+            var hashSet = new HashSet<Employee>(new FullNameEqualityComparer());
+
+            using var enumerator = employees.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+
+                if (hashSet.Add(current))
+                {
+                    yield return current;
+                }
+            }
         }
     }
 
