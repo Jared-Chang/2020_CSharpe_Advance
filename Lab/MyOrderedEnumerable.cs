@@ -5,7 +5,12 @@ using Lab.Entities;
 
 namespace Lab
 {
-    public class MyOrderedEnumerable : IEnumerable<Employee>
+    public interface IMyOrderedEnumerable : IEnumerable<Employee>
+    {
+        IMyOrderedEnumerable Append(IComparer<Employee> currentComparer);
+    }
+
+    public class MyOrderedEnumerable : IMyOrderedEnumerable
     {
         private readonly IEnumerable<Employee> _source;
         private IComparer<Employee> _untilNowComparer;
@@ -26,7 +31,7 @@ namespace Lab
             return GetEnumerator();
         }
 
-        public static IEnumerator<Employee> JoeySort(IEnumerable<Employee> employees,
+        public IEnumerator<Employee> JoeySort(IEnumerable<Employee> employees,
             IComparer<Employee> comboComparer)
         {
             var elements = employees.ToList();
@@ -50,7 +55,7 @@ namespace Lab
             }
         }
 
-        public MyOrderedEnumerable Append(IComparer<Employee> currentComparer)
+        public IMyOrderedEnumerable Append(IComparer<Employee> currentComparer)
         {
             _untilNowComparer = new ComboComparer(_untilNowComparer, currentComparer);
             return this;
