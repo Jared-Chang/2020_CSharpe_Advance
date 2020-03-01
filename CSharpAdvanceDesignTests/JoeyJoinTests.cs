@@ -32,7 +32,8 @@ namespace CSharpAdvanceDesignTests
                 new Pet {Name = "QQ", Owner = joey}
             };
 
-            var actual = JoeyJoin(employees, pets, employee => employee, arg => arg.Owner, (employee1, pet) => Tuple.Create(employee1.FirstName, pet.Name));
+            var actual = JoeyJoin(employees, pets, employee => employee, arg => arg.Owner,
+                (employee1, pet) => Tuple.Create(employee1.FirstName, pet.Name));
 
             var expected = new[]
             {
@@ -54,7 +55,9 @@ namespace CSharpAdvanceDesignTests
         {
             foreach (var employee in employees)
             {
-                foreach (var pet in pets.Where(p => outterKeySelector(employee) == innerKeySelector(p)))
+                var equalityComparer = EqualityComparer<Employee>.Default;
+                foreach (var pet in pets.Where(p =>
+                    equalityComparer.Equals(outterKeySelector(employee), innerKeySelector(p))))
                 {
                     yield return resultSelector(employee, pet);
                 }
