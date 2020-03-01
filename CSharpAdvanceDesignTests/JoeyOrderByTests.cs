@@ -9,60 +9,57 @@ namespace CSharpAdvanceDesignTests
     [TestFixture]
     public class JoeyOrderByTests
     {
-        //[Test]
-        //public void orderBy_lastName()
-        //{
-        //    var employees = new[]
-        //    {
-        //        new Employee {FirstName = "Joey", LastName = "Wang"},
-        //        new Employee {FirstName = "Tom", LastName = "Li"},
-        //        new Employee {FirstName = "Joseph", LastName = "Chen"},
-        //        new Employee {FirstName = "Joey", LastName = "Chen"}
-        //    };
+        [Test]
+        public void orderBy_lastName()
+        {
+            var employees = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Joey", LastName = "Chen"}
+            };
 
-        //    var actual =
-        //        employees.JoeySort(
-        //            new CombineKeyComparer<string>(element => element.LastName, Comparer<string>.Default));
+            var actual = employees
+                .JoeyOrderBy(employee => employee.LastName);
 
-        //    var expected = new[]
-        //    {
-        //        new Employee {FirstName = "Joseph", LastName = "Chen"},
-        //        new Employee {FirstName = "Joey", LastName = "Chen"},
-        //        new Employee {FirstName = "Tom", LastName = "Li"},
-        //        new Employee {FirstName = "Joey", LastName = "Wang"}
-        //    };
+            var expected = new[]
+            {
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joey", LastName = "Wang"}
+            };
 
-        //    expected.ToExpectedObject().ShouldMatch(actual);
-        //}
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
 
-        //[Test]
-        //public void orderBy_lastName_and_firstName()
-        //{
-        //    var employees = new[]
-        //    {
-        //        new Employee {FirstName = "Joey", LastName = "Wang"},
-        //        new Employee {FirstName = "Tom", LastName = "Li"},
-        //        new Employee {FirstName = "Joseph", LastName = "Chen"},
-        //        new Employee {FirstName = "Joey", LastName = "Chen"}
-        //    };
+        [Test]
+        public void orderBy_lastName_and_firstName()
+        {
+            var employees = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Joey", LastName = "Chen"}
+            };
 
-        //    var comboComparer = new ComboComparer(
-        //        new CombineKeyComparer<string>(element => element.LastName, Comparer<string>.Default),
-        //        new CombineKeyComparer<string>(employee => employee.FirstName, Comparer<string>.Default));
+            var actual = employees
+                .JoeyOrderBy(employee => employee.LastName)
+                .JoeyThenBy(employee => employee.FirstName);
 
-        //    var actual = employees.JoeySort(comboComparer);
-
-        //    var expected = new[]
-        //    {
-        //        new Employee {FirstName = "Joey", LastName = "Chen"},
-        //        new Employee {FirstName = "Joseph", LastName = "Chen"},
-        //        new Employee {FirstName = "Tom", LastName = "Li"},
-        //        new Employee {FirstName = "Joey", LastName = "Wang"}
-        //    };
+            var expected = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joey", LastName = "Wang"}
+            };
 
 
-        //    expected.ToExpectedObject().ShouldMatch(actual);
-        //}
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
 
         [Test]
         public void orderBy_lastName_and_firstName_and_age()
