@@ -205,37 +205,13 @@ namespace Lab
         public static IEnumerable<Employee> JoeyOrderBy<TKey>(this IEnumerable<Employee> employees,
             Func<Employee, TKey> keySelector)
         {
-                return employees;
+            return employees;
         }
 
         public static IEnumerable<Employee> JoeyThenBy<TKey>(this IEnumerable<Employee> employees,
             Func<Employee, TKey> keySelector)
         {
             return employees;
-        }
-
-        public static IEnumerable<Employee> JoeySort(this IEnumerable<Employee> employees,
-            IComparer<Employee> comboComparer)
-        {
-            var elements = employees.ToList();
-            while (elements.Any())
-            {
-                var minElement = elements[0];
-                var index = 0;
-                for (var i = 1; i < elements.Count; i++)
-                {
-                    var element = elements[i];
-
-                    if (comboComparer.Compare(element, minElement) < 0)
-                    {
-                        minElement = element;
-                        index = i;
-                    }
-                }
-
-                elements.RemoveAt(index);
-                yield return minElement;
-            }
         }
     }
 }
