@@ -18,15 +18,15 @@ namespace CSharpAdvanceDesignTests
         private Func<Employee, string> KeySelector { get; }
         private IComparer<string> KeyComparer { get; }
 
-        public int Compare(Employee employee, Employee minElement)
+        public int Compare(Employee element, Employee minElement)
         {
-            return KeyComparer.Compare(KeySelector(employee), KeySelector(minElement));
+            return KeyComparer.Compare(KeySelector(element), KeySelector(minElement));
         }
     }
 
-    public class ComboCompare
+    public class ComboComparer : IComparer<Employee>
     {
-        public ComboCompare(IComparer<Employee> firstComparer, IComparer<Employee> secondComparer)
+        public ComboComparer(IComparer<Employee> firstComparer, IComparer<Employee> secondComparer)
         {
             FirstComparer = firstComparer;
             SecondComparer = secondComparer;
@@ -35,19 +35,16 @@ namespace CSharpAdvanceDesignTests
         public IComparer<Employee> FirstComparer { get; }
         public IComparer<Employee> SecondComparer { get; }
 
-        public int Compare(Employee employee, Employee minElement)
+        public int Compare(Employee element, Employee minElement)
         {
-            int finalResult = 0;
+            var firstCompareResult = FirstComparer.Compare(element, minElement);
 
-            var firstCompareResult = FirstComparer.Compare(employee, minElement);
-            var secondCompareResult = SecondComparer.Compare(employee, minElement);
-
-            if (firstCompareResult < 0 || firstCompareResult == 0 && secondCompareResult < 0)
+            if (firstCompareResult != 0)
             {
-                finalResult = firstCompareResult - secondCompareResult;
+                return firstCompareResult;
             }
 
-            return finalResult;
+            return SecondComparer.Compare(element, minElement);
         }
     }
 
@@ -89,12 +86,11 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"}
             };
 
-            Func<Employee, string> secondKeySelector = employee => employee.FirstName;
-            IComparer<string> secondKeyComparer = Comparer<string>.Default;
-            var actual =
-                JoeyOrderByLastNameAndFirstName(employees,
-                    new ComboCompare(new CombineKeyComparer(employee => employee.LastName, Comparer<string>.Default),
-                        new CombineKeyComparer(secondKeySelector, secondKeyComparer)));
+            var comboComparer = new ComboComparer(
+                new CombineKeyComparer(element => element.LastName, Comparer<string>.Default),
+                new CombineKeyComparer(element1 => element1.FirstName, Comparer<string>.Default));
+
+            var actual = JoeyOrderByLastNameAndFirstName(employees, comboComparer);
 
             var expected = new[]
             {
@@ -110,7 +106,7 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
             IEnumerable<Employee> employees,
-            ComboCompare comboCompare)
+            IComparer<Employee> comboComparer)
         {
             var elements = employees.ToList();
             while (elements.Any())
@@ -119,13 +115,11 @@ namespace CSharpAdvanceDesignTests
                 var index = 0;
                 for (var i = 1; i < elements.Count; i++)
                 {
-                    var employee = elements[i];
+                    var element = elements[i];
 
-                    var finalResult = comboCompare.Compare(employee, minElement);
-
-                    if (finalResult < 0)
+                    if (comboComparer.Compare(element, minElement) < 0)
                     {
-                        minElement = employee;
+                        minElement = element;
                         index = i;
                     }
                 }
