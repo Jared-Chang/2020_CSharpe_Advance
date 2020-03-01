@@ -9,17 +9,17 @@ namespace Lab
     public class MyOrderedEnumerable : IEnumerable<Employee>
     {
         private IComparer<Employee> _untilNowComparer;
-        private readonly IEnumerable<Employee> _employees;
+        private readonly IEnumerable<Employee> _source;
 
-        public MyOrderedEnumerable(IEnumerable<Employee> employees, IComparer<Employee> untilNowComparer)
+        public MyOrderedEnumerable(IEnumerable<Employee> source, IComparer<Employee> untilNowComparer)
         {
-            _employees = employees;
+            _source = source;
             _untilNowComparer = untilNowComparer;
         }
 
         public IEnumerator<Employee> GetEnumerator()
         {
-            return _employees.GetEnumerator();
+            return JoeySort(_source, _untilNowComparer);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -27,7 +27,7 @@ namespace Lab
             return GetEnumerator();
         }
 
-        public static IEnumerable<Employee> JoeySort(IEnumerable<Employee> employees,
+        public static IEnumerator<Employee> JoeySort(IEnumerable<Employee> employees,
             IComparer<Employee> comboComparer)
         {
             var elements = employees.ToList();
