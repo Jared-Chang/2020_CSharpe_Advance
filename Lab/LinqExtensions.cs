@@ -205,7 +205,8 @@ namespace Lab
         public static IEnumerable<Employee> JoeyOrderBy<TKey>(this IEnumerable<Employee> employees,
             Func<Employee, TKey> keySelector)
         {
-            return employees;
+            return new MyOrderedEnumerable(employees,
+                new CombineKeyComparer<TKey>(keySelector, Comparer<TKey>.Default));
         }
 
         public static IEnumerable<Employee> JoeyThenBy<TKey>(this IEnumerable<Employee> employees,
