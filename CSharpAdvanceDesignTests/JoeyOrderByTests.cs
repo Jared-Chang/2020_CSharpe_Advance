@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ExpectedObjects;
 using Lab;
 using Lab.Entities;
@@ -21,7 +20,9 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"}
             };
 
-            var actual = employees.JoeySort(new CombineKeyComparer<string>(element => element.LastName, Comparer<string>.Default));
+            var actual =
+                employees.JoeySort(
+                    new CombineKeyComparer<string>(element => element.LastName, Comparer<string>.Default));
 
             var expected = new[]
             {
@@ -81,7 +82,10 @@ namespace CSharpAdvanceDesignTests
                     new CombineKeyComparer<string>(employee => employee.FirstName, Comparer<string>.Default)),
                 new CombineKeyComparer<int>(element => element.Age, Comparer<int>.Default));
 
-            var actual = employees.JoeySort(comboComparer);
+            var actual = employees
+                .JoeyOrderBy(employee => employee.LastName)
+                .JoeyThenBy(employee => employee.FirstName)
+                .JoeyThenBy(employee => employee.Age);
 
             var expected = new[]
             {
