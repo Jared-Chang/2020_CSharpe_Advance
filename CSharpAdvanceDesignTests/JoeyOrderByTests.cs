@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ExpectedObjects;
+﻿using ExpectedObjects;
 using Lab;
 using Lab.Entities;
 using NUnit.Framework;
@@ -73,12 +72,6 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen", Age = 50}
             };
 
-            var comboComparer = new ComboComparer(
-                new ComboComparer(
-                    new CombineKeyComparer<string>(element => element.LastName, Comparer<string>.Default),
-                    new CombineKeyComparer<string>(employee => employee.FirstName, Comparer<string>.Default)),
-                new CombineKeyComparer<int>(element => element.Age, Comparer<int>.Default));
-
             var actual = employees
                 .JoeyOrderBy(employee => employee.LastName)
                 .JoeyThenBy(employee => employee.FirstName)
@@ -91,6 +84,32 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joseph", LastName = "Chen", Age = 50},
                 new Employee {FirstName = "Tom", LastName = "Li", Age = 8},
                 new Employee {FirstName = "Joey", LastName = "Wang", Age = 10}
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        [Test]
+        public void order_by_girl_name_then_age()
+        {
+            var girls = new[]
+            {
+                new Girl {Age = 1, Name = "a"},
+                new Girl {Age = 3, Name = "a"},
+                new Girl {Age = 4, Name = "b"},
+                new Girl {Age = 2, Name = "b"}
+            };
+
+            var actual = girls
+                .JoeyOrderBy(employee => employee.Name)
+                .JoeyThenBy(employee => employee.Age);
+
+            var expected = new[]
+            {
+                new Girl {Age = 1, Name = "a"},
+                new Girl {Age = 3, Name = "a"},
+                new Girl {Age = 2, Name = "b"},
+                new Girl {Age = 4, Name = "b"}
             };
 
             expected.ToExpectedObject().ShouldMatch(actual);

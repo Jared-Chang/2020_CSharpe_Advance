@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Lab.Entities;
 
 namespace Lab
 {
@@ -202,17 +200,19 @@ namespace Lab
             return result;
         }
 
-        public static IMyOrderedEnumerable JoeyOrderBy<TKey>(this IEnumerable<Employee> employees,
-            Func<Employee, TKey> keySelector)
+        public static IMyOrderedEnumerable<TSource> JoeyOrderBy<TSource, TKey>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector)
         {
-            return new MyOrderedEnumerable(employees,
-                new CombineKeyComparer<TKey>(keySelector, Comparer<TKey>.Default));
+            return new MyOrderedEnumerable<TSource>(source,
+                new CombineKeyComparer<TSource, TKey>(keySelector, Comparer<TKey>.Default));
         }
 
-        public static IMyOrderedEnumerable JoeyThenBy<TKey>(this IMyOrderedEnumerable myOrderedEnumerable,
-            Func<Employee, TKey> keySelector)
+        public static IMyOrderedEnumerable<TSource> JoeyThenBy<TSource, TKey>(
+            this IMyOrderedEnumerable<TSource> myOrderedEnumerable,
+            Func<TSource, TKey> keySelector)
         {
-            return myOrderedEnumerable.Append(new CombineKeyComparer<TKey>( keySelector, Comparer<TKey>.Default));
+            return myOrderedEnumerable.Append(
+                new CombineKeyComparer<TSource, TKey>(keySelector, Comparer<TKey>.Default));
         }
     }
 }

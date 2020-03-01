@@ -1,27 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Lab.Entities;
 
 namespace Lab
 {
-    public interface IMyOrderedEnumerable : IEnumerable<Employee>
+    public interface IMyOrderedEnumerable<TSource> : IEnumerable<TSource>
     {
-        IMyOrderedEnumerable Append(IComparer<Employee> currentComparer);
+        IMyOrderedEnumerable<TSource> Append(IComparer<TSource> currentComparer);
     }
 
-    public class MyOrderedEnumerable : IMyOrderedEnumerable
+    public class MyOrderedEnumerable<TSource> : IMyOrderedEnumerable<TSource>
     {
-        private readonly IEnumerable<Employee> _source;
-        private IComparer<Employee> _untilNowComparer;
+        private readonly IEnumerable<TSource> _source;
+        private IComparer<TSource> _untilNowComparer;
 
-        public MyOrderedEnumerable(IEnumerable<Employee> source, IComparer<Employee> untilNowComparer)
+        public MyOrderedEnumerable(IEnumerable<TSource> source, IComparer<TSource> untilNowComparer)
         {
             _source = source;
             _untilNowComparer = untilNowComparer;
         }
 
-        public IEnumerator<Employee> GetEnumerator()
+        public IEnumerator<TSource> GetEnumerator()
         {
             return JoeySort(_source, _untilNowComparer);
         }
@@ -31,14 +30,14 @@ namespace Lab
             return GetEnumerator();
         }
 
-        public IMyOrderedEnumerable Append(IComparer<Employee> currentComparer)
+        public IMyOrderedEnumerable<TSource> Append(IComparer<TSource> currentComparer)
         {
-            _untilNowComparer = new ComboComparer(_untilNowComparer, currentComparer);
+            _untilNowComparer = new ComboComparer<TSource>(_untilNowComparer, currentComparer);
             return this;
         }
 
-        public IEnumerator<Employee> JoeySort(IEnumerable<Employee> employees,
-            IComparer<Employee> comboComparer)
+        public IEnumerator<TSource> JoeySort(IEnumerable<TSource> employees,
+            IComparer<TSource> comboComparer)
         {
             var elements = employees.ToList();
             while (elements.Any())
