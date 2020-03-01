@@ -55,7 +55,7 @@ namespace CSharpAdvanceDesignTests
             {
                 foreach (var pet in pets.Where(p => outterKeySelector(employee) == innerKeySelector(p)))
                 {
-                    yield return Tuple.Create(pet.Owner.FirstName, pet.Name);
+                    yield return Tuple.Create(employee.FirstName, pet.Name);
                 }
             }
         }
