@@ -49,7 +49,7 @@ namespace CSharpAdvanceDesignTests
         {
             foreach (var employee in employees)
             {
-                foreach (var pet in pets.Where(p => p.Owner == employee))
+                foreach (var pet in pets.Where(p => employee == p.Owner))
                 {
                     yield return Tuple.Create(pet.Owner.FirstName, pet.Name);
                 }
