@@ -1,53 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ExpectedObjects;
+using Lab;
 using Lab.Entities;
 using NUnit.Framework;
 
 namespace CSharpAdvanceDesignTests
 {
-    public class CombineKeyComparer : IComparer<Employee>
-    {
-        public CombineKeyComparer(Func<Employee, string> keySelector, IComparer<string> keyComparer)
-        {
-            KeySelector = keySelector;
-            KeyComparer = keyComparer;
-        }
-
-        private Func<Employee, string> KeySelector { get; }
-        private IComparer<string> KeyComparer { get; }
-
-        public int Compare(Employee element, Employee minElement)
-        {
-            return KeyComparer.Compare(KeySelector(element), KeySelector(minElement));
-        }
-    }
-
-    public class ComboComparer : IComparer<Employee>
-    {
-        public ComboComparer(IComparer<Employee> firstComparer, IComparer<Employee> secondComparer)
-        {
-            FirstComparer = firstComparer;
-            SecondComparer = secondComparer;
-        }
-
-        public IComparer<Employee> FirstComparer { get; }
-        public IComparer<Employee> SecondComparer { get; }
-
-        public int Compare(Employee element, Employee minElement)
-        {
-            var firstCompareResult = FirstComparer.Compare(element, minElement);
-
-            if (firstCompareResult != 0)
-            {
-                return firstCompareResult;
-            }
-
-            return SecondComparer.Compare(element, minElement);
-        }
-    }
-
     [TestFixture]
     public class JoeyOrderByTests
     {
@@ -62,8 +21,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"}
             };
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees,
-                new CombineKeyComparer(element => element.LastName, Comparer<string>.Default));
+            var actual = employees.JoeySort(new CombineKeyComparer<string>(element => element.LastName, Comparer<string>.Default));
 
             var expected = new[]
             {
@@ -88,10 +46,10 @@ namespace CSharpAdvanceDesignTests
             };
 
             var comboComparer = new ComboComparer(
-                new CombineKeyComparer(element => element.LastName, Comparer<string>.Default),
-                new CombineKeyComparer(employee => employee.FirstName, Comparer<string>.Default));
+                new CombineKeyComparer<string>(element => element.LastName, Comparer<string>.Default),
+                new CombineKeyComparer<string>(employee => employee.FirstName, Comparer<string>.Default));
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees, comboComparer);
+            var actual = employees.JoeySort(comboComparer);
 
             var expected = new[]
             {
@@ -105,29 +63,37 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
-            IEnumerable<Employee> employees,
-            IComparer<Employee> comboComparer)
+        [Test]
+        public void orderBy_lastName_and_firstName_and_age()
         {
-            var elements = employees.ToList();
-            while (elements.Any())
+            var employees = new[]
             {
-                var minElement = elements[0];
-                var index = 0;
-                for (var i = 1; i < elements.Count; i++)
-                {
-                    var element = elements[i];
+                new Employee {FirstName = "Joey", LastName = "Wang", Age = 10},
+                new Employee {FirstName = "Tom", LastName = "Li", Age = 8},
+                new Employee {FirstName = "Joseph", LastName = "Chen", Age = 50},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 40},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 50}
+            };
 
-                    if (comboComparer.Compare(element, minElement) < 0)
-                    {
-                        minElement = element;
-                        index = i;
-                    }
-                }
+            var comboComparer = new ComboComparer(
+                new ComboComparer(
+                    new CombineKeyComparer<string>(element => element.LastName, Comparer<string>.Default),
+                    new CombineKeyComparer<string>(employee => employee.FirstName, Comparer<string>.Default)),
+                new CombineKeyComparer<int>(element => element.Age, Comparer<int>.Default));
 
-                elements.RemoveAt(index);
-                yield return minElement;
-            }
+            var actual = employees.JoeySort(comboComparer);
+
+            var expected = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 40},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 50},
+                new Employee {FirstName = "Joseph", LastName = "Chen", Age = 50},
+                new Employee {FirstName = "Tom", LastName = "Li", Age = 8},
+                new Employee {FirstName = "Joey", LastName = "Wang", Age = 10}
+            };
+
+
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
     }
 }
